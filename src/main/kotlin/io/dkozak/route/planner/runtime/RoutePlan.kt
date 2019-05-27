@@ -3,6 +3,7 @@ package io.dkozak.route.planner.runtime
 import io.dkozak.route.planner.model.*
 import org.pcollections.PVector
 import org.pcollections.TreePVector
+import kotlin.random.Random
 
 
 data class RoutePlan(
@@ -27,7 +28,14 @@ data class RoutePlan(
 
 
     fun localRandomModification(): RoutePlan {
-        return this
+        if (this.trucks.isEmpty())
+            return this
+
+        val i = Random.nextInt(this.trucks.size)
+        val modifiedTruck = trucks[i].randomPathModification()
+        return this.copy(
+                trucks = trucks.with(i, modifiedTruck)
+        )
     }
 
     override fun compareTo(other: RoutePlan): Int = this.price.compareTo(other.price)
@@ -56,4 +64,16 @@ data class Truck(
     fun addSupplier(newSupplier: Supplier): Truck = this.copy(
             suppliers = suppliers.plus(newSupplier)
     )
+
+    fun randomPathModification(): Truck {
+        if (suppliers.size < 2) return this
+        val i = Random.nextInt(suppliers.size)
+        val j = Random.nextInt(suppliers.size)
+        val supplierI = suppliers[i]
+        val supplierJ = suppliers[j]
+        return this.copy(
+                suppliers = suppliers.with(i, supplierJ)
+                        .with(j, supplierI)
+        )
+    }
 }

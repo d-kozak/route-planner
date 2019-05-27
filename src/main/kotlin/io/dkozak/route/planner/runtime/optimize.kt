@@ -7,15 +7,20 @@ import io.dkozak.route.planner.model.distance
 fun planRoute(modelConfiguration: ModelConfiguration, simulationConfiguration: SimulationConfiguration): RoutePlan {
     var bestPlan = findAnyPlan(modelConfiguration)
 
+    var current = bestPlan
+    val all = mutableSetOf<RoutePlan>()
     for (i in 1..simulationConfiguration.iterations) {
-        val plan = bestPlan.localRandomModification()
+        val plan = current.localRandomModification()
         println("Step $i")
         printPlan(plan)
 
-        if (plan > bestPlan)
+        if (plan < bestPlan)
             bestPlan = plan
+        all.add(plan)
+        current = plan
     }
 
+    println("Explored ${all.size} distinct plans")
     return bestPlan
 }
 
