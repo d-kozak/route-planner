@@ -1,9 +1,15 @@
 package io.dkozak.route.planner.runtime
 
-import io.dkozak.route.planner.model.Configuration
+import io.dkozak.route.planner.model.ModelConfiguration
 import io.dkozak.route.planner.model.distance
 
-fun planRoute(configuration: Configuration): RoutePlan {
+fun planRoute(modelConfiguration: ModelConfiguration, simulationConfiguration: SimulationConfiguration): RoutePlan {
+    var bestPlan = findAnyPlan(modelConfiguration)
+
+    return bestPlan
+}
+
+private fun findAnyPlan(configuration: ModelConfiguration): RoutePlan {
     var plan = RoutePlan()
     val freeSuppliers = configuration.suppliers.toMutableList()
     while (plan.maxPossibleUnits < configuration.wantedResourceUnits) {

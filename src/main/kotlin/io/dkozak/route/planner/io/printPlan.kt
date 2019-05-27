@@ -1,10 +1,10 @@
 package io.dkozak.route.planner.io
 
-import io.dkozak.route.planner.model.Configuration
+import io.dkozak.route.planner.model.ModelConfiguration
 import io.dkozak.route.planner.runtime.RoutePlan
 import io.dkozak.route.planner.runtime.calculatePrice
 
-fun printPlan(routePlan: RoutePlan, configuration: Configuration) {
+fun printPlan(routePlan: RoutePlan, configuration: ModelConfiguration) {
 
     println("====================ROUTE PLAN====================")
     println("# of Trucks: ${routePlan.trucks.size}")

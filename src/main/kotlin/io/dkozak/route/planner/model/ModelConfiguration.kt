@@ -7,7 +7,7 @@ data class Supplier(
         val prod: Int
 )
 
-data class Configuration(
+data class ModelConfiguration(
         val wantedResourceUnits: Int,
         val suppliers: PVector<Supplier>,
         val dcPos: Location = Pair(500, 500),
