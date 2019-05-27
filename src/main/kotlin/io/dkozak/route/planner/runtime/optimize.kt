@@ -4,7 +4,7 @@ import io.dkozak.route.planner.model.Configuration
 import io.dkozak.route.planner.model.distance
 
 fun planRoute(configuration: Configuration): RoutePlan {
-    val plan = RoutePlan()
+    var plan = RoutePlan()
     val freeSuppliers = configuration.suppliers.toMutableList()
     while (plan.maxPossibleUnits < configuration.wantedResourceUnits) {
         val newTruckNeeded = plan.trucks.lastOrNull()?.maxPossibleUnits ?: Int.MAX_VALUE >= configuration.truckCapacity
@@ -13,10 +13,13 @@ fun planRoute(configuration: Configuration): RoutePlan {
 
         val nearest = freeSuppliers
                 .minBy { startPoint.distance(it.pos) } ?: throw NoFeasiblePlanException("More suppliers needed")
-        truck.suppliers.add(nearest)
+        val modifiedTruck = truck.addSupplier(nearest)
+
         freeSuppliers.remove(nearest)
-        if (newTruckNeeded)
-            plan.trucks.add(truck)
+        plan = if (newTruckNeeded)
+            plan.addTruck(modifiedTruck)
+        else
+            plan.replaceLastTruck(modifiedTruck)
     }
     return plan
 }

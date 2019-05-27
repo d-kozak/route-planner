@@ -4,26 +4,26 @@ import io.dkozak.route.planner.model.DistanceInKm
 import io.dkozak.route.planner.model.Location
 import io.dkozak.route.planner.model.Supplier
 import io.dkozak.route.planner.model.distance
+import org.pcollections.PVector
+import org.pcollections.TreePVector
 
 
 data class RoutePlan(
-        val trucks: MutableList<Truck> = mutableListOf()
+        val trucks: PVector<Truck> = TreePVector.empty()
 ) {
     val maxPossibleUnits
         get() = trucks.map {
             it.maxPossibleUnits
         }.sum()
 
-    val usedSuppliers
-        get() = trucks.asSequence()
-                .flatMap { it.suppliers.asSequence() }
-
     fun totalDistance(dcPos: Location) = trucks.map { it.totalDistance(dcPos) }.reduce(DistanceInKm::plus)
+    fun addTruck(newTruck: Truck): RoutePlan = this.copy(trucks = trucks.plus(newTruck))
+    fun replaceLastTruck(newTruck: Truck): RoutePlan = this.copy(trucks = trucks.with(trucks.size - 1, newTruck))
 }
 
 data class Truck(
         val maxCapacity: Int,
-        val suppliers: MutableList<Supplier> = mutableListOf()
+        val suppliers: PVector<Supplier> = TreePVector.empty()
 ) {
     val maxPossibleUnits
         get() = Math.min(suppliers.map { it.prod }.sum(), maxCapacity)
@@ -39,4 +39,8 @@ data class Truck(
             }
         }.reduce(DistanceInKm::plus)
     }
+
+    fun addSupplier(newSupplier: Supplier): Truck = this.copy(
+            suppliers = suppliers.plus(newSupplier)
+    )
 }

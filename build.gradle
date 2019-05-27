@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    // Use the Kotlin JDK 8 standard library.
+    implementation 'org.pcollections:pcollections:3.0.3'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     testImplementation("io.mockk:mockk:1.9")
     testCompile("org.assertj:assertj-core:3.11.1")
