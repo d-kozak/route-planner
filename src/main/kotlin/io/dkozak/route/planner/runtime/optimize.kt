@@ -42,7 +42,7 @@ fun planRoute(modelConfiguration: ModelConfiguration, simulationConfiguration: S
     return best
 }
 
-private fun findAnyPlan(configuration: ModelConfiguration): RoutePlan {
+fun findAnyPlan(configuration: ModelConfiguration): RoutePlan {
     var plan = RoutePlan(configuration)
     val freeSuppliers = configuration.suppliers.toMutableList()
     while (plan.maxPossibleUnits < configuration.wantedResourceUnits) {
