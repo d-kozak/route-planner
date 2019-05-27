@@ -19,7 +19,8 @@ fun planRoute(modelConfiguration: ModelConfiguration, simulationConfiguration: S
         if (current < best)
             best = current
         val next = current.randomModification()
-        println("Step $i -> ${current.price}")
+        if (simulationConfiguration.logDetails)
+            println("Step $i -> ${current.price}")
         all.add(next)
 
         if (Random.nextDouble() < 0.1 || next < current) {
@@ -31,18 +32,19 @@ fun planRoute(modelConfiguration: ModelConfiguration, simulationConfiguration: S
             current = best
     }
 
-    println("Explored ${all.size} distinct plans")
-    println("Local random $localRandom")
-    println("Nonlocal random $nonLocalRandom")
-    println("Split truck $split")
+    if (simulationConfiguration.logDetails) {
+        println("Explored ${all.size} distinct plans")
+        println("Local random $localRandom")
+        println("Nonlocal random $nonLocalRandom")
+        println("Split truck $split")
 
-    if (first == best) {
-        println("First was best! :X")
-    } else {
-        println("Difference between first and best:")
-        println(first.diff(best))
+        if (first == best) {
+            println("First was best! :X")
+        } else {
+            println("Difference between first and best:")
+            println(first.diff(best))
+        }
     }
-
     return best
 }
 

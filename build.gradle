@@ -21,10 +21,23 @@ repositories {
     mavenCentral()
 }
 
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'io.dkozak.route.planner.MainKt'
+    }
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+
 dependencies {
-    implementation 'org.pcollections:pcollections:3.0.3'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-    implementation 'org.apache.commons:commons-math3:3.6.1'
+    compile 'org.pcollections:pcollections:3.0.3'
+    compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    compile 'org.apache.commons:commons-math3:3.6.1'
 
     testImplementation("io.mockk:mockk:1.9")
     testCompile("org.assertj:assertj-core:3.11.1")
@@ -36,4 +49,6 @@ compileKotlin {
         freeCompilerArgs = ["-XXLanguage:+InlineClasses"]
     }
 }
+
+
 

@@ -17,6 +17,7 @@ fun main() {
     val results = mutableListOf<Pair<Double, Double>>()
 
     for (wantedUnits in 0..2000 step 50) {
+        println("Executing for units $wantedUnits")
         val modelConfiguration = ModelConfiguration(wantedUnits, suppliers)
         val plan = planRoute(modelConfiguration, simulationConfiguration)
         printPlan(plan)
@@ -30,9 +31,8 @@ fun main() {
         require(dist < 50) { "For input $x the difference between real and interpolated is $dist, which is more than 50" }
     }
 
+    println("Lagrange coefficients of interpolated function:")
     println(Arrays.toString(function.coefficients))
-
-
 }
 
 fun interpolateFunction(values: List<Pair<Double, Double>>): PolynomialFunctionLagrangeForm {
