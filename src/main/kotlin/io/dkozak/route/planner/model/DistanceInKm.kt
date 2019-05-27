@@ -6,4 +6,6 @@ inline class DistanceInKm(val value: Double) : Comparable<DistanceInKm> {
     operator fun plus(other: DistanceInKm) = DistanceInKm(this.value + other.value)
 
     operator fun times(scale: Int) = DistanceInKm(this.value * scale)
+
+    override fun toString(): String = "${value} km"
 }
