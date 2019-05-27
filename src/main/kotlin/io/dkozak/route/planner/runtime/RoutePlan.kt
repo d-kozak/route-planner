@@ -16,7 +16,7 @@ data class RoutePlan(
         }.sum()
 
     val totalDistance
-        get() = trucks.map { it.totalDistance(configuration.dcPos) }.reduce(DistanceInKm::plus)
+        get() = if (trucks.isNotEmpty()) trucks.map { it.totalDistance(configuration.dcPos) }.reduce(DistanceInKm::plus) else DistanceInKm(0.0)
 
     val price
         get() = configuration.costPerKm * totalDistance + configuration.costTruckPerDay * trucks.size

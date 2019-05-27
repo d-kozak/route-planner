@@ -8,5 +8,5 @@ inline class Money(val value: Double) : Comparable<Money> {
 
     override fun compareTo(other: Money): Int = this.value.compareTo(other.value)
 
-    override fun toString(): String = "${value} e"
+    override fun toString(): String = "$value euro"
 }

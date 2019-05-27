@@ -5,5 +5,5 @@ inline class MoneyPerKm(val value: Double) : Comparable<MoneyPerKm> {
 
     override fun compareTo(other: MoneyPerKm): Int = this.value.compareTo(other.value)
 
-    override fun toString(): String = "${value} e/km"
+    override fun toString(): String = "${value} euro/km"
 }
