@@ -1,17 +1,18 @@
 package io.dkozak.route.planner.runtime
 
-import io.dkozak.route.planner.io.printPlan
 import io.dkozak.route.planner.model.ModelConfiguration
 import io.dkozak.route.planner.model.distance
 import io.dkozak.route.planner.runtime.modificatinos.localRandom
 import io.dkozak.route.planner.runtime.modificatinos.nonLocalRandom
 import io.dkozak.route.planner.runtime.modificatinos.randomModification
 import io.dkozak.route.planner.runtime.modificatinos.split
+import io.dkozak.route.planner.runtime.utils.diff
 import kotlin.random.Random
 
 
 fun planRoute(modelConfiguration: ModelConfiguration, simulationConfiguration: SimulationConfiguration): RoutePlan {
-    var best = findAnyPlan(modelConfiguration)
+    val first = findAnyPlan(modelConfiguration)
+    var best = first
     var current = best
     val all = mutableSetOf(current)
     for (i in 1..simulationConfiguration.iterations) {
@@ -35,8 +36,11 @@ fun planRoute(modelConfiguration: ModelConfiguration, simulationConfiguration: S
     println("Nonlocal random $nonLocalRandom")
     println("Split truck $split")
 
-    for (solution in all.sorted().take(10)) {
-        printPlan(solution)
+    if (first == best) {
+        println("First was best! :X")
+    } else {
+        println("Difference between first and best:")
+        println(first.diff(best))
     }
 
     return best

@@ -2,11 +2,6 @@ package io.dkozak.route.planner.model
 
 import org.pcollections.PVector
 
-data class Supplier(
-        val pos: Location,
-        val prod: Int
-)
-
 data class ModelConfiguration(
         val wantedResourceUnits: Int,
         val suppliers: PVector<Supplier>,

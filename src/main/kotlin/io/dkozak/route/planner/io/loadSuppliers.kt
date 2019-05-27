@@ -10,7 +10,7 @@ fun loadSuppliers(): PVector<Supplier> {
         return TreePVector.from(stream.bufferedReader().lines()
                 .skip(1)
                 .map { it.split(",").map(String::toInt) }
-                .map { (_, x, y, prod) -> Supplier(x to y, prod) }
+                .map { (id, x, y, prod) -> Supplier(id, x to y, prod) }
                 .toList())
     }
 }
