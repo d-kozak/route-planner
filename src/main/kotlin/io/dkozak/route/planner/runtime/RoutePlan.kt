@@ -22,10 +22,11 @@ data class RoutePlan(
 }
 
 data class Truck(
+        val maxCapacity: Int,
         val suppliers: MutableList<Supplier> = mutableListOf()
 ) {
     val maxPossibleUnits
-        get() = suppliers.map { it.prod }.sum()
+        get() = Math.min(suppliers.map { it.prod }.sum(), maxCapacity)
 
     fun totalDistance(dcPos: Location): DistanceInKm = when (suppliers.size) {
         0 -> DistanceInKm(0.0)

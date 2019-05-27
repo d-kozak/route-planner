@@ -10,10 +10,10 @@ fun printPlan(routePlan: RoutePlan, configuration: Configuration) {
     println("# of Trucks: ${routePlan.trucks.size}")
     println("max units ${routePlan.maxPossibleUnits}")
     val suppliers = routePlan.trucks
-            .mapIndexed { i, truck -> "\ttruck $i: maxUnits: ${truck.maxPossibleUnits}, distance:${truck.totalDistance(configuration.dcPos)} ,supplierCount:${truck.suppliers.size}:  ${truck.suppliers}" }
+            .mapIndexed { i, truck -> "\ttruck[$i] -> units: ${truck.maxPossibleUnits}, distance:${truck.totalDistance(configuration.dcPos)}, supplierCount:${truck.suppliers.size} ->  ${truck.suppliers}" }
             .joinToString("\n")
     println(suppliers)
-    println("Total distance ${routePlan.totalDistance(configuration.dcPos)}")
+    println("Total distance: ${routePlan.totalDistance(configuration.dcPos)}")
     println("Total price: ${calculatePrice(routePlan, configuration)}")
     println("==================================================")
 }

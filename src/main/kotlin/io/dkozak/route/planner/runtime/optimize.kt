@@ -8,7 +8,7 @@ fun planRoute(configuration: Configuration): RoutePlan {
     val freeSuppliers = configuration.suppliers.toMutableList()
     while (plan.maxPossibleUnits < configuration.wantedResourceUnits) {
         val newTruckNeeded = plan.trucks.lastOrNull()?.maxPossibleUnits ?: Int.MAX_VALUE >= configuration.truckCapacity
-        val truck = if (!newTruckNeeded) plan.trucks.last() else Truck()
+        val truck = if (!newTruckNeeded) plan.trucks.last() else Truck(configuration.truckCapacity)
         val startPoint = truck.suppliers.lastOrNull()?.pos ?: configuration.dcPos
 
         val nearest = freeSuppliers
