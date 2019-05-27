@@ -1,24 +1,37 @@
 package io.dkozak.route.planner.runtime
 
-import io.dkozak.route.planner.model.DistanceInKm
-import io.dkozak.route.planner.model.Location
-import io.dkozak.route.planner.model.Supplier
-import io.dkozak.route.planner.model.distance
+import io.dkozak.route.planner.model.*
 import org.pcollections.PVector
 import org.pcollections.TreePVector
 
 
 data class RoutePlan(
+        val configuration: ModelConfiguration,
         val trucks: PVector<Truck> = TreePVector.empty()
-) {
+) : Comparable<RoutePlan> {
+
     val maxPossibleUnits
         get() = trucks.map {
             it.maxPossibleUnits
         }.sum()
 
-    fun totalDistance(dcPos: Location) = trucks.map { it.totalDistance(dcPos) }.reduce(DistanceInKm::plus)
+    val totalDistance
+        get() = trucks.map { it.totalDistance(configuration.dcPos) }.reduce(DistanceInKm::plus)
+
+    val price
+        get() = configuration.costPerKm * totalDistance + configuration.costTruckPerDay * trucks.size
+
     fun addTruck(newTruck: Truck): RoutePlan = this.copy(trucks = trucks.plus(newTruck))
+
     fun replaceLastTruck(newTruck: Truck): RoutePlan = this.copy(trucks = trucks.with(trucks.size - 1, newTruck))
+
+
+    fun localRandomModification(): RoutePlan {
+        return this
+    }
+
+    override fun compareTo(other: RoutePlan): Int = this.price.compareTo(other.price)
+
 }
 
 data class Truck(

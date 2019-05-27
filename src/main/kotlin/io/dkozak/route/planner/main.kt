@@ -15,5 +15,5 @@ fun main() {
     println(modelConfiguration)
 
     val plan = planRoute(modelConfiguration, simulationConfiguration)
-    printPlan(plan, modelConfiguration)
+    printPlan(plan)
 }

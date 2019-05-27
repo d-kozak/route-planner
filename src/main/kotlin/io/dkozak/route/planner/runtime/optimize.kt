@@ -1,16 +1,26 @@
 package io.dkozak.route.planner.runtime
 
+import io.dkozak.route.planner.io.printPlan
 import io.dkozak.route.planner.model.ModelConfiguration
 import io.dkozak.route.planner.model.distance
 
 fun planRoute(modelConfiguration: ModelConfiguration, simulationConfiguration: SimulationConfiguration): RoutePlan {
     var bestPlan = findAnyPlan(modelConfiguration)
 
+    for (i in 1..simulationConfiguration.iterations) {
+        val plan = bestPlan.localRandomModification()
+        println("Step $i")
+        printPlan(plan)
+
+        if (plan > bestPlan)
+            bestPlan = plan
+    }
+
     return bestPlan
 }
 
 private fun findAnyPlan(configuration: ModelConfiguration): RoutePlan {
-    var plan = RoutePlan()
+    var plan = RoutePlan(configuration)
     val freeSuppliers = configuration.suppliers.toMutableList()
     while (plan.maxPossibleUnits < configuration.wantedResourceUnits) {
         val newTruckNeeded = plan.trucks.lastOrNull()?.maxPossibleUnits ?: Int.MAX_VALUE >= configuration.truckCapacity
