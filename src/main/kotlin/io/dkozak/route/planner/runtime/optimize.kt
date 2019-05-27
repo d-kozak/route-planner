@@ -3,25 +3,43 @@ package io.dkozak.route.planner.runtime
 import io.dkozak.route.planner.io.printPlan
 import io.dkozak.route.planner.model.ModelConfiguration
 import io.dkozak.route.planner.model.distance
+import io.dkozak.route.planner.runtime.modificatinos.localRandom
+import io.dkozak.route.planner.runtime.modificatinos.nonLocalRandom
+import io.dkozak.route.planner.runtime.modificatinos.randomModification
+import io.dkozak.route.planner.runtime.modificatinos.split
+import kotlin.random.Random
+
 
 fun planRoute(modelConfiguration: ModelConfiguration, simulationConfiguration: SimulationConfiguration): RoutePlan {
-    var bestPlan = findAnyPlan(modelConfiguration)
-
-    var current = bestPlan
-    val all = mutableSetOf<RoutePlan>()
+    var best = findAnyPlan(modelConfiguration)
+    var current = best
+    val all = mutableSetOf(current)
     for (i in 1..simulationConfiguration.iterations) {
-        val plan = current.localRandomModification()
-        println("Step $i")
-        printPlan(plan)
+        if (current < best)
+            best = current
+        val next = current.randomModification()
+        println("Step $i -> ${current.price}")
+        all.add(next)
 
-        if (plan < bestPlan)
-            bestPlan = plan
-        all.add(plan)
-        current = plan
+        if (Random.nextDouble() < 0.1 || next < current) {
+            current = next
+        }
+
+        // if we are too far off, continue with current best solution
+        if (current.price > best.price * 2)
+            current = best
     }
 
     println("Explored ${all.size} distinct plans")
-    return bestPlan
+    println("Local random $localRandom")
+    println("Nonlocal random $nonLocalRandom")
+    println("Split truck $split")
+
+    for (solution in all.sorted().take(10)) {
+        printPlan(solution)
+    }
+
+    return best
 }
 
 private fun findAnyPlan(configuration: ModelConfiguration): RoutePlan {

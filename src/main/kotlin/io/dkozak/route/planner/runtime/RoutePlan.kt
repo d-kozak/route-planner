@@ -3,7 +3,6 @@ package io.dkozak.route.planner.runtime
 import io.dkozak.route.planner.model.*
 import org.pcollections.PVector
 import org.pcollections.TreePVector
-import kotlin.random.Random
 
 
 data class RoutePlan(
@@ -26,17 +25,7 @@ data class RoutePlan(
 
     fun replaceLastTruck(newTruck: Truck): RoutePlan = this.copy(trucks = trucks.with(trucks.size - 1, newTruck))
 
-
-    fun localRandomModification(): RoutePlan {
-        if (this.trucks.isEmpty())
-            return this
-
-        val i = Random.nextInt(this.trucks.size)
-        val modifiedTruck = trucks[i].randomPathModification()
-        return this.copy(
-                trucks = trucks.with(i, modifiedTruck)
-        )
-    }
+    fun removeTruck(index: Int) = this.copy(trucks = trucks.minus(index))
 
     override fun compareTo(other: RoutePlan): Int = this.price.compareTo(other.price)
 
@@ -47,7 +36,7 @@ data class Truck(
         val suppliers: PVector<Supplier> = TreePVector.empty()
 ) {
     val maxPossibleUnits
-        get() = Math.min(suppliers.map { it.prod }.sum(), maxCapacity)
+        get() = Math.min(maxCapacity, suppliers.map { it.prod }.sum())
 
     fun totalDistance(dcPos: Location): DistanceInKm = when (suppliers.size) {
         0 -> DistanceInKm(0.0)
@@ -65,15 +54,11 @@ data class Truck(
             suppliers = suppliers.plus(newSupplier)
     )
 
-    fun randomPathModification(): Truck {
-        if (suppliers.size < 2) return this
-        val i = Random.nextInt(suppliers.size)
-        val j = Random.nextInt(suppliers.size)
-        val supplierI = suppliers[i]
-        val supplierJ = suppliers[j]
-        return this.copy(
-                suppliers = suppliers.with(i, supplierJ)
-                        .with(j, supplierI)
-        )
-    }
+    fun removeSupplier(index: Int) = this.copy(
+            suppliers = suppliers.minus(index)
+    )
+
+    fun isFull() = maxPossibleUnits == maxCapacity
+
+    fun isNotFull() = !isFull()
 }

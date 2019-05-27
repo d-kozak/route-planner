@@ -9,8 +9,8 @@ import io.dkozak.route.planner.runtime.planRoute
 
 fun main() {
     val suppliers = loadSuppliers()
-    val modelConfiguration = ModelConfiguration(500, suppliers)
-    val simulationConfiguration = SimulationConfiguration(1000)
+    val modelConfiguration = ModelConfiguration(1111, suppliers)
+    val simulationConfiguration = SimulationConfiguration(100000)
 
     println(modelConfiguration)
 
