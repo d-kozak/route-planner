@@ -1,6 +1,6 @@
 package io.dkozak.route.planner.runtime
 
-import io.dkozak.route.planner.io.loadSuppliers
+import io.dkozak.route.planner.io.loadSuppliersFromFile
 import io.dkozak.route.planner.model.ModelConfiguration
 import io.dkozak.route.planner.model.Supplier
 import org.assertj.core.api.Assertions.assertThat
@@ -12,7 +12,7 @@ class RoutePlanTest {
 
     @Test
     fun `equals test`() {
-        val suppliers = loadSuppliers()
+        val suppliers = loadSuppliersFromFile()
         val modelConfiguration = ModelConfiguration(1111, suppliers)
         val plan = findAnyPlan(modelConfiguration)
 
@@ -21,7 +21,7 @@ class RoutePlanTest {
 
         val truck = plan.trucks[0]
         assertThat(truck).isEqualTo(truck)
-        assertThat(truck.addSupplier(Supplier(10 to 20, 5))).isNotEqualTo(truck)
+        assertThat(truck.addSupplier(Supplier(1, 10 to 20, 5))).isNotEqualTo(truck)
         assertThat(truck.removeSupplier(1)).isNotEqualTo(truck)
     }
 
