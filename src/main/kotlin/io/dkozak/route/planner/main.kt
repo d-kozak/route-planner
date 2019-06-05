@@ -33,6 +33,7 @@ private fun executeWithConfiguration(configFile: String) {
     val modelConfig = dsl.process()
     val simulationConfig = SimulationConfiguration(1000, true)
     val plan = planRoute(modelConfig, simulationConfig)
+    println("Wanted ${modelConfig.wantedResourceUnits} units")
     printPlan(plan)
 }
 

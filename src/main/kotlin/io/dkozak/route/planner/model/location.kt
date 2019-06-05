@@ -12,6 +12,6 @@ fun Location.distance(other: Location): DistanceInKm = DistanceInKm(euclideanDis
 
 
 fun euclideanDistance(a: Location, b: Location) = (Math.sqrt(
-        (Math.abs(a.x - b.x) +
-                Math.abs(a.y - b.y)).toDouble())
+        (Math.pow((a.x - b.x).toDouble(), 2.0) +
+                Math.pow((a.y - b.y).toDouble(), 2.0)))
         )
